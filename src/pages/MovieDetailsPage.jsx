@@ -5,7 +5,7 @@ import { fetchMovieById } from 'services/movie-api';
 import { Back } from 'components/Back/Back';
 import { Loader } from 'components/Loader/Loader';
 
-import noPoster from '../../images/no-poster.jpg';
+import noPoster from '../images/no-poster.jpg';
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState({});
