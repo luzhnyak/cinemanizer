@@ -36,7 +36,7 @@ const LoginPage = () => {
   return (
     <>
       <h1>Login</h1>
-      <FormAuth onSubmit={handleLogin} />
+      <FormAuth onSubmit={handleLogin} title="Login" />
     </>
   );
 };

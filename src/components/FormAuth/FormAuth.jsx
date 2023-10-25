@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-const FormAuth = ({ onSubmit }) => {
+const FormAuth = ({ onSubmit, title }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -44,7 +44,7 @@ const FormAuth = ({ onSubmit }) => {
         />
       </FloatingLabel>
       <Button variant="primary" type="submit">
-        Primary
+        {title}
       </Button>
     </form>
   );

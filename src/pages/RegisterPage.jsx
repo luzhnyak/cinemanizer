@@ -35,7 +35,7 @@ const RegisterPage = () => {
   return (
     <>
       <h1>Register</h1>
-      <FormAuth onSubmit={handleRegister} />
+      <FormAuth onSubmit={handleRegister} title="Register" />
     </>
   );
 };

@@ -1,18 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { fetchMovies } from 'services/movie-api';
 import { Pagination } from 'components/Pagination/Pagination';
 import { Loader } from 'components/Loader/Loader';
 import { Gallery } from 'components/Gallery/Gallery';
+import { useFetchMoviesQuery } from 'redux/api';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const query = searchParams.get('query');
   const page = searchParams.get('page') ?? 1;
+
+  const { data, isLoading, error } = useFetchMoviesQuery(
+    { query, page },
+    {
+      skip: !query,
+    }
+  );
+
+  const movies = data?.results ?? [];
+  const totalPages = data?.total_pages ?? 0;
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -20,32 +27,6 @@ const Movies = () => {
     setSearchParams({ query: form.elements.query.value, page: 1 });
     form.reset();
   };
-
-  useEffect(() => {
-    if (!query) {
-      setMovies([]);
-      return;
-    }
-    if (Number(page) < 1 || !Number(page)) {
-      setSearchParams({ query: query, page: 1 });
-      return;
-    }
-
-    async function getMovies() {
-      try {
-        setLoading(true);
-        const allMovies = await fetchMovies(query, page);
-        setMovies(allMovies);
-      } catch (error) {
-        if (error.code !== 'ERR_CANCELED') {
-          console.error('Something went wrong. Try again.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-    getMovies();
-  }, [query, page, setSearchParams]);
 
   return (
     <div>
@@ -61,14 +42,14 @@ const Movies = () => {
           Search
         </button>
       </form>
-      {loading && <Loader />}
-      {movies.results?.length === 0 && query && (
+      {isLoading && <Loader />}
+      {movies.length === 0 && query && (
         <p>Sorry. We can't find movies matching your query "{query}".</p>
       )}
 
-      {movies.results?.length !== 0 && <Gallery movies={movies.results} />}
-      {movies.total_pages > 1 && (
-        <Pagination totalPage={movies.total_pages} page={page} query={query} />
+      {movies.length !== 0 && <Gallery movies={movies} />}
+      {totalPages > 1 && (
+        <Pagination totalPage={totalPages} page={page} query={query} />
       )}
     </div>
   );

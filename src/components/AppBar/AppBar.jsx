@@ -42,21 +42,30 @@ const AppBar = () => {
           </Nav>
 
           <Nav>
-            <Nav.Link as={NavLink} to="login">
-              Login
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="register">
-              Register
-            </Nav.Link>
+            {!email && (
+              <>
+                <Nav.Link as={NavLink} to="login">
+                  Login
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="register">
+                  Register
+                </Nav.Link>
+              </>
+            )}
             {email && (
-              <NavDropdown title={email} id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="">My List</NavDropdown.Item>
+              <>
+                <Nav.Link as={NavLink} to="watchlist">
+                  Watchlist
+                </Nav.Link>
+                <NavDropdown title={email} id="collapsible-nav-dropdown">
+                  <NavDropdown.Item href="">My List</NavDropdown.Item>
 
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={hahdleLogout} as="button">
-                  LogOut
-                </NavDropdown.Item>
-              </NavDropdown>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={hahdleLogout} as="button">
+                    LogOut
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>

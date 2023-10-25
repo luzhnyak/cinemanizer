@@ -1,33 +1,20 @@
 import { CardReview } from 'components/Card/CardReview';
 import { Loader } from 'components/Loader/Loader';
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchMovieReviewsById } from 'services/movie-api';
+import { useFetchMovieReviewsByIdQuery } from 'redux/api';
 
 const Reviews = () => {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(false);
-
   const { movieId } = useParams();
 
-  useEffect(() => {
-    async function getReviewsMovie() {
-      try {
-        setLoading(true);
-        const _reviews = await fetchMovieReviewsById(movieId);
-        setReviews(_reviews.results);
-      } catch (error) {
-        if (error.code !== 'ERR_CANCELED') {
-          console.error('Something went wrong. Try again.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
+  const { data, isLoading, error } = useFetchMovieReviewsByIdQuery(movieId, {
+    skip: !movieId,
+  });
 
-    getReviewsMovie();
-  }, [movieId]);
-  if (loading) {
+  console.log(data);
+
+  const reviews = data?.results ?? {};
+
+  if (isLoading) {
     return <Loader />;
   }
 
