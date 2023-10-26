@@ -1,5 +1,5 @@
 import AppBar from 'components/AppBar/AppBar';
-import Footer from 'components/Footer/Footer';
+// import Footer from 'components/Footer/Footer';
 import { Loader } from 'components/Loader/Loader';
 import { Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -15,7 +15,7 @@ export const SharedLayout = () => {
         </Suspense>
       </div>
       <Toaster position="top-right" />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -10,22 +10,10 @@ import toast from 'react-hot-toast';
 import { Button } from 'react-bootstrap';
 
 import { getDatabase, ref, set } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
-import { app } from '../firebase-api';
+// import { getAuth } from 'firebase/auth';
+// import { app } from '../firebase-api';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMovie, deleteMovie } from 'redux/watchlistSlice';
-
-function writeUserData(movies) {
-  const db = getDatabase();
-  const auth = getAuth(app);
-  const userId = auth?.currentUser?.uid;
-  // console.log('add start', userId);
-
-  set(ref(db, 'users/' + userId), {
-    movies: movies,
-  });
-  // console.log('add end');
-}
 
 const MovieDetails = () => {
   const dispatch = useDispatch();
@@ -37,15 +25,14 @@ const MovieDetails = () => {
   const { data, isLoading, error } = useFetchMovieByIdQuery(movieId, {
     skip: !movieId,
   });
+
+  const { id } = useSelector(state => state.user);
+
   const movie = data ?? {};
 
   const { movies } = useSelector(state => state.watchlist);
 
-  // console.log('watchlist', movies);
-
   const isWatchlist = movies?.some(m => m.id === movie.id);
-
-  // console.log('isWatchlist', isWatchlist);
 
   // Виводимо помилку
   useEffect(() => {
@@ -53,10 +40,23 @@ const MovieDetails = () => {
   }, [error]);
 
   useEffect(() => {
+    function writeUserData(movies) {
+      if (!id) return;
+      const db = getDatabase();
+      // const auth = getAuth(app);
+      // const userId = auth?.currentUser?.uid;
+      // console.log('add start', userId);
+
+      set(ref(db, 'users/' + id), {
+        movies: movies,
+      });
+      // console.log('add end');
+    }
+
     if (movies) {
       writeUserData(movies);
     }
-  }, [movies]);
+  }, [movies, id]);
 
   const { title, poster_path, vote_average, overview, genres, release_date } =
     movie;
@@ -67,7 +67,6 @@ const MovieDetails = () => {
     } else {
       dispatch(addMovie(movie));
     }
-    // readUserData();
   };
 
   if (isLoading) {
@@ -88,9 +87,11 @@ const MovieDetails = () => {
             className="card-img-top"
             alt={title}
           />
-          <Button className="mt-3" onClick={handleAddToWatchlist}>
-            {isWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
-          </Button>
+          {id && (
+            <Button className="mt-3 w-100" onClick={handleAddToWatchlist}>
+              {isWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
+            </Button>
+          )}
         </div>
         <div className="col-8">
           <h1>{title}</h1>
