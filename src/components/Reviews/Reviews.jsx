@@ -1,5 +1,7 @@
 import { CardReview } from 'components/Card/CardReview';
 import { Loader } from 'components/Loader/Loader';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { useFetchMovieReviewsByIdQuery } from 'redux/api';
 
@@ -10,7 +12,10 @@ const Reviews = () => {
     skip: !movieId,
   });
 
-  console.log(data);
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   const reviews = data?.results ?? {};
 

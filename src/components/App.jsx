@@ -9,8 +9,10 @@ import Videos from './Videos/Videos';
 import PersonDetailsPage from 'pages/PersonDetailsPage';
 import PeoplesPage from 'pages/PeoplesPage';
 import PersonCast from './Cast/PersonCast';
+import { PrivateRoute } from './PrivateRoute';
+import WatchlistPage from 'pages/WatchlistPage';
 
-const Home = lazy(() => import('pages/HomePage'));
+const HomePage = lazy(() => import('pages/HomePage'));
 const Movies = lazy(() => import('pages/MoviesPage'));
 const MovieDetails = lazy(() => import('pages/MovieDetailsPage'));
 const NotFound = lazy(() => import('pages/NotFoundPage'));
@@ -21,7 +23,7 @@ export const App = () => {
   return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
-        <Route index element={<Home />} />
+        <Route index element={<HomePage />} />
         <Route path="movies" element={<Movies />} />
         <Route path="movies/:movieId" element={<MovieDetails />}>
           <Route path="cast" element={<Cast />} />
@@ -32,6 +34,12 @@ export const App = () => {
         <Route path="people/:personId" element={<PersonDetailsPage />}>
           <Route path="cast" element={<PersonCast />} />
         </Route>
+        <Route
+          path="watchlist"
+          element={
+            <PrivateRoute redirectTo="/login" component={<WatchlistPage />} />
+          }
+        />
         <Route
           path="login"
           element={<RestrictedRoute redirectTo="/" component={<LoginPage />} />}

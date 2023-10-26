@@ -1,5 +1,7 @@
 import { Card } from 'components/Card/Card';
 import { Loader } from 'components/Loader/Loader';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { useFetchCombinedCreditsByIdQuery } from 'redux/api';
 
@@ -13,7 +15,10 @@ const PersonCast = () => {
     }
   );
 
-  console.log(data);
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   const credits = data?.cast ?? {};
 

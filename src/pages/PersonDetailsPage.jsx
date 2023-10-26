@@ -1,9 +1,10 @@
 import { Back } from 'components/Back/Back';
 import { Loader } from 'components/Loader/Loader';
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import { useFetchPersonByIdQuery } from 'redux/api';
 import noPoster from '../images/no-poster.jpg';
+import toast from 'react-hot-toast';
 
 const PersonDetailsPage = () => {
   const { personId } = useParams();
@@ -14,7 +15,10 @@ const PersonDetailsPage = () => {
     skip: !personId,
   });
 
-  console.log(data);
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   const person = data ?? {};
 
@@ -41,8 +45,12 @@ const PersonDetailsPage = () => {
         </div>
         <div className="col-8">
           <h1>{name}</h1>
-          <p>Birthday: {birthday} </p>
-          <p>Place of birth: {place_of_birth} </p>
+          <p>
+            <b>Birthday:</b> {birthday}{' '}
+          </p>
+          <p>
+            <b>Place of birth:</b> {place_of_birth}{' '}
+          </p>
           <h3>Biography</h3>
           <p>{biography}</p>
           {/* <h3>Genres</h3>

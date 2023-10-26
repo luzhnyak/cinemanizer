@@ -1,5 +1,7 @@
 import { CardActor } from 'components/Card/CardActor';
 import { Loader } from 'components/Loader/Loader';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { useFetchMovieCreditsByIdQuery } from 'redux/api';
 
@@ -10,7 +12,10 @@ const Cast = () => {
     skip: !movieId,
   });
 
-  console.log(data);
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   const credits = data?.cast ?? {};
 

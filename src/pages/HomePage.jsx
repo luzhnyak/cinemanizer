@@ -1,11 +1,18 @@
 import { Loader } from 'components/Loader/Loader';
 import { Gallery } from 'components/Gallery/Gallery';
 import { useFetchTopMoviesQuery } from 'redux/api';
+import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
-const Home = () => {
+const HomePage = () => {
   const { data, isLoading, error } = useFetchTopMoviesQuery();
 
   const movies = data?.results ?? [];
+
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   return (
     <div>
@@ -15,4 +22,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

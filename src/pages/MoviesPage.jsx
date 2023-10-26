@@ -4,6 +4,8 @@ import { Pagination } from 'components/Pagination/Pagination';
 import { Loader } from 'components/Loader/Loader';
 import { Gallery } from 'components/Gallery/Gallery';
 import { useFetchMoviesQuery } from 'redux/api';
+import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +19,11 @@ const Movies = () => {
       skip: !query,
     }
   );
+
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
 
   const movies = data?.results ?? [];
   const totalPages = data?.total_pages ?? 0;

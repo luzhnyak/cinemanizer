@@ -1,4 +1,4 @@
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useParams, NavLink, useLocation } from 'react-router-dom';
 
 import { Back } from 'components/Back/Back';
@@ -6,21 +6,69 @@ import { Loader } from 'components/Loader/Loader';
 
 import noPoster from '../images/no-poster.jpg';
 import { useFetchMovieByIdQuery } from 'redux/api';
+import toast from 'react-hot-toast';
+import { Button } from 'react-bootstrap';
+
+import { getDatabase, ref, set } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
+import { app } from '../firebase-api';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMovie, deleteMovie } from 'redux/watchlistSlice';
+
+function writeUserData(movies) {
+  const db = getDatabase();
+  const auth = getAuth(app);
+  const userId = auth?.currentUser?.uid;
+  // console.log('add start', userId);
+
+  set(ref(db, 'users/' + userId), {
+    movies: movies,
+  });
+  // console.log('add end');
+}
 
 const MovieDetails = () => {
+  const dispatch = useDispatch();
   const { movieId } = useParams();
   const location = useLocation();
+
   const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
 
   const { data, isLoading, error } = useFetchMovieByIdQuery(movieId, {
     skip: !movieId,
   });
-
-  console.log(data);
-
   const movie = data ?? {};
 
-  const { title, poster_path, vote_average, overview, genres } = movie;
+  const { movies } = useSelector(state => state.watchlist);
+
+  // console.log('watchlist', movies);
+
+  const isWatchlist = movies?.some(m => m.id === movie.id);
+
+  // console.log('isWatchlist', isWatchlist);
+
+  // Виводимо помилку
+  useEffect(() => {
+    if (error) toast.error(error.data.message);
+  }, [error]);
+
+  useEffect(() => {
+    if (movies) {
+      writeUserData(movies);
+    }
+  }, [movies]);
+
+  const { title, poster_path, vote_average, overview, genres, release_date } =
+    movie;
+
+  const handleAddToWatchlist = () => {
+    if (isWatchlist) {
+      dispatch(deleteMovie(movie.id));
+    } else {
+      dispatch(addMovie(movie));
+    }
+    // readUserData();
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -40,10 +88,19 @@ const MovieDetails = () => {
             className="card-img-top"
             alt={title}
           />
+          <Button className="mt-3" onClick={handleAddToWatchlist}>
+            {isWatchlist ? 'Remove from watchlist' : 'Add to watchlist'}
+          </Button>
         </div>
         <div className="col-8">
           <h1>{title}</h1>
-          <p>User Score: {Math.round(vote_average * 10)} %</p>
+          <p>
+            <b>User Score:</b> {Math.round(vote_average * 10)} %
+          </p>
+          <p>
+            <b>Release date:</b> {release_date}
+          </p>
+
           <h3>Overview</h3>
           <p>{overview}</p>
           <h3>Genres</h3>

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { userReducer } from './userSlice';
+import { persistedReducer } from './userSlice';
 import { api } from './api';
 import {
   persistStore,
@@ -10,10 +10,12 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import { watchlistReducer } from './watchlistSlice';
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    user: persistedReducer,
+    watchlist: watchlistReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -23,3 +25,5 @@ export const store = configureStore({
       },
     }).concat(api.middleware),
 });
+
+export const persistor = persistStore(store);

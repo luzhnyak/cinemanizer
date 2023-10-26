@@ -3,19 +3,33 @@ import { Button } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-const FormAuth = ({ onSubmit, title }) => {
+const FormAuth = ({ onSubmit, title, isRegister }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = event => {
     event.preventDefault();
-    onSubmit({ email, password });
+    onSubmit({ name, email, password });
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {isRegister && (
+        <FloatingLabel controlId="floatingInput1" label="Name" className="mb-3">
+          <Form.Control
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={event => {
+              setName(event.target.value);
+            }}
+          />
+        </FloatingLabel>
+      )}
+
       <FloatingLabel
-        controlId="floatingInput"
+        controlId="floatingInput2"
         label="Email address"
         className="mb-3"
       >
@@ -30,7 +44,7 @@ const FormAuth = ({ onSubmit, title }) => {
       </FloatingLabel>
 
       <FloatingLabel
-        controlId="floatingPassword"
+        controlId="floatingPassword3"
         label="Password"
         className="mb-3"
       >

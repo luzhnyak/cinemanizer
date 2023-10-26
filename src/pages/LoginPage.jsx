@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { setUser } from 'redux/userSlice';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -14,29 +15,25 @@ const LoginPage = () => {
       .then(userCredential => {
         // Signed up
         const user = userCredential.user;
-        console.log(user);
 
         dispatch(
           setUser({
             id: user.uid,
+            name: user.displayName,
             email: user.email,
             token: user.accessToken,
           })
         );
-
-        // ...
       })
       .catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        toast.error(error.message);
       });
   };
 
   return (
     <>
       <h1>Login</h1>
-      <FormAuth onSubmit={handleLogin} title="Login" />
+      <FormAuth onSubmit={handleLogin} title="Login" isRegister={false} />
     </>
   );
 };

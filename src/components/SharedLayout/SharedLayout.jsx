@@ -1,19 +1,21 @@
 import AppBar from 'components/AppBar/AppBar';
-import { Header } from 'components/Header/Header';
+import Footer from 'components/Footer/Footer';
 import { Loader } from 'components/Loader/Loader';
 import { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Outlet } from 'react-router-dom/dist';
 
 export const SharedLayout = () => {
   return (
     <div>
-      <Header />
       <AppBar />
       <div className="container">
         <Suspense fallback={<Loader />}>
           <Outlet />
         </Suspense>
       </div>
+      <Toaster position="top-right" />
+      <Footer />
     </div>
   );
 };
