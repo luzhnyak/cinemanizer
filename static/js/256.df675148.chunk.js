@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkfilmoteka=self.webpackChunkfilmoteka||[]).push([[256],{256:function(e,n,t){t.r(n);var u=t(184);n.default=function(){return(0,u.jsx)("h1",{children:"Page not found"})}}}]);
-//# sourceMappingURL=256.df675148.chunk.js.map
