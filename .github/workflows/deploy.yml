@@ -17,8 +17,8 @@ jobs:
           npm run lint:js
           npm run build
         env:
-          REACT_APP_MOVI_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-          REACT_APP_MOVI_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_MOVI_BASE_URL: ${{ secrets.REACT_APP_MOVI_BASE_URL }}
+          REACT_APP_MOVI_API_KEY: ${{ secrets.REACT_APP_MOVI_API_KEY }}
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
           REACT_APP_AUTH_DOMAIN: ${{ secrets.REACT_APP_AUTH_DOMAIN }}
           REACT_APP_PROJECT_ID: ${{ secrets.REACT_APP_PROJECT_ID }}
