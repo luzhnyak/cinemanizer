@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const BASE_URL = process.env.REACT_BASE_URL;
-const API_KEY = process.env.REACT_API_KEY;
+const BASE_URL = process.env.REACT_APP_MOVI_BASE_URL;
+const API_KEY = process.env.REACT_APP_MOVI_API_KEY;
 
 export const api = createApi({
   reducerPath: 'api',
